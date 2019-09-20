@@ -1,12 +1,41 @@
 #include <QtWidgets>
+#include <QStringListModel>
+#include <QStandardItemModel>
+
 #include "maindialog.h"
 
 MainDialog::MainDialog(QWidget *parent)
     : QDialog(parent)
 {
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->setContentsMargins(QMargins());
-    mainLayout->setSizeConstraint(QLayout::SetFixedSize);
+
+
+    //左侧文件列表
+    QVBoxLayout *leftLayout = new QVBoxLayout;
+    leftLayout->setContentsMargins(QMargins());
+    leftLayout->setSizeConstraint(QLayout::SetFixedSize);
+
+    QPushButton* chooseDirPushButton=new QPushButton(tr("选择文件夹"));
+    chooseDirPushButton->setObjectName(QString::fromUtf8("chooseDirPushButton"));
+
+    filenameModel= new QStandardItemModel(this);
+
+    filenameListView=new QListView();
+    filenameListView->setEnabled(false);
+    filenameListView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    filenameListView->setModel(filenameModel);
+    filenameListView->setObjectName(QString::fromUtf8("filenameListView"));
+
+    leftLayout->addWidget(chooseDirPushButton);
+    leftLayout->addWidget(filenameListView);
+    filenameListView->setEnabled(false);
+
+
+    leftLayout->addStretch();
+
+    //右侧消息协议列表
+    QVBoxLayout *rightLayout = new QVBoxLayout;
+    rightLayout->setContentsMargins(QMargins());
+    rightLayout->setSizeConstraint(QLayout::SetFixedSize);
 
     QScrollArea* scrollArea=new QScrollArea();
     scrollArea->setMinimumHeight(900);
@@ -17,11 +46,19 @@ MainDialog::MainDialog(QWidget *parent)
 
     scrollArea->setWidget(protocalWidget);
 
-    mainLayout->addWidget(scrollArea);
+    rightLayout->addWidget(scrollArea);
+
+    //主layout
+    QHBoxLayout* mainLayout=new QHBoxLayout();
+    mainLayout->addLayout(leftLayout);
+    mainLayout->addLayout(rightLayout);
 
     setLayout(mainLayout);
 
     setWindowTitle(tr("网络协议记录"));
+
+    this->setObjectName(QString::fromUtf8("MainDialog"));
+    QMetaObject::connectSlotsByName(this);
 }
 
 QWidget* MainDialog::CreateProtocalPart(const QString& varTypeStr)
@@ -85,6 +122,45 @@ QWidget* MainDialog::CreateProtocal()
     containerWidget->setFrameStyle(QFrame::Box);
     containerWidget->setLayout(protocalGridLayout);
     return containerWidget;
+}
+
+void MainDialog::on_chooseDirPushButton_clicked()
+{
+    qDebug()<<"on_chooseDirPushButton_clicked";
+    QString dirPath = QFileDialog::getExistingDirectory(this, tr("Open Directory"), "./", QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    qDebug()<<dirPath;
+    if(dirPath.size()==0)
+    {
+        qDebug()<<"calcel select dir";
+        return;
+    }
+
+    filenameListView->setEnabled(true);
+    filenameModel->clear();
+
+    dirPath=QDir::toNativeSeparators(dirPath);
+    QDir dir(dirPath);
+    dir.setFilter(QDir::Files);
+
+    QFileInfoList fileInfoList= dir.entryInfoList();
+    for(int index=0;index<fileInfoList.length();index++)
+    {
+        QString fileName=fileInfoList.at(index).fileName();
+        qDebug()<<fileName;
+
+        QStandardItem* standardItem=new QStandardItem(fileName);
+        filenameModel->appendRow(standardItem);
+    }
+}
+
+void MainDialog::on_filenameListView_clicked(QModelIndex varModelIndex)
+{
+    qDebug()<<"on_filenameListView_clicked"<<varModelIndex.data();
+}
+
+void MainDialog::on_filenameListView_doubleClicked()
+{
+//    qDebug()<<"on_filenameListView_doubleClicked";
 }
 
 MainDialog::~MainDialog()
