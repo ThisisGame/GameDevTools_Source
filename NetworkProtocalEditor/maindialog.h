@@ -37,10 +37,10 @@ private:
 
     /// 创建一个协议的界面
     /// @variable varTypeStr 标题，客户端 or 服务器
-    QWidget* CreateProtocalPart(const QString& varTypeStr,const neb::CJsonObject& varProtocalJsonObject);
+    QWidget* CreateProtocalPart(const QString& varTypeStr,neb::CJsonObject& varProtocalJsonObject);
 
     /// 创建一对协议的界面
-    QWidget* CreateProtocal(const neb::CJsonObject& varJsonObject);
+    QWidget* CreateProtocal(neb::CJsonObject& varJsonObject);
 
     /// 创建协议列表的界面
     void CreateProtocalArray(const QString& varJsonFilePath);

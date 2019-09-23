@@ -70,32 +70,42 @@ MainDialog::MainDialog(QWidget *parent)
     this->resize(1000,1000);
 }
 
-QWidget* MainDialog::CreateProtocalPart(const QString& varTypeStr,const neb::CJsonObject& varProtocalJsonObject)
+QWidget* MainDialog::CreateProtocalPart(const QString& varTypeStr,neb::CJsonObject& varProtocalJsonObject)
 {
-    QString gameMessageIDStr=varProtocalJsonObject["GameMessageID"].toString();
-    QString protobufStr=varProtocalJsonObject["ProtoBuf"].toString();
+    std::string gameMessageIDStr;
+    varProtocalJsonObject.Get("GameMessageID",gameMessageIDStr);
 
-    qDebug()<<"GameMessageID:"<<gameMessageIDStr;
-    qDebug()<<"ProtoBuf:"<<protobufStr;
+
+    std::string protobufStr;
+    varProtocalJsonObject.Get("ProtoBuf",protobufStr);
+
+    qDebug()<<"GameMessageID:"<<gameMessageIDStr.data();
+    qDebug()<<"ProtoBuf:"<<protobufStr.data();
 
     QLabel *typeLabel=new QLabel(varTypeStr);
 
     QLabel *messageidTipsLabel=new QLabel(tr("消息ID:"));
     QLineEdit *messageidLineEdit=new QLineEdit();
     messageidLineEdit->setPlaceholderText(tr("输入消息ID"));
-    messageidLineEdit->setText(gameMessageIDStr);
-    connect(messageidLineEdit,&QLineEdit::textChanged,[=]
+    messageidLineEdit->setText(QString::fromUtf8(gameMessageIDStr.data()));
+    neb::CJsonObject* protocalJsonObject=&varProtocalJsonObject;
+    connect(messageidLineEdit,&QLineEdit::textChanged,[messageidLineEdit,varProtocalJsonObject]
     {
-        this->SaveCurrentJsonFile();
+        qDebug()<<messageidLineEdit->text();
+        qDebug()<<varProtocalJsonObject.ToString().data();
+        varProtocalJsonObject.
+        varProtocalJsonObject.Replace("GameMessageID",messageidLineEdit->text().toStdString());
+//        this->SaveCurrentJsonFile();
     });
 
     QLabel  *protocalTipsLabel=new QLabel(tr("消息结构:"));
     QTextEdit *protocalTextEdit=new QTextEdit();
     protocalTextEdit->setPlaceholderText(tr("输入protobuf结构"));
-    protocalTextEdit->setText(protobufStr);
+    protocalTextEdit->setText(QString::fromUtf8(protobufStr.data()));
     protocalTextEdit->setContentsMargins(QMargins());
-    connect(protocalTextEdit,&QTextEdit::textChanged,[=]
+    connect(protocalTextEdit,&QTextEdit::textChanged,[this,&varProtocalJsonObject,protocalTextEdit]
     {
+        varProtocalJsonObject.Replace("ProtoBuf",protocalTextEdit->toPlainText().toStdString());
         this->SaveCurrentJsonFile();
     });
 
@@ -119,7 +129,7 @@ QWidget* MainDialog::CreateProtocalPart(const QString& varTypeStr,const neb::CJs
 
 //创建一对协议的UI
 //参数的Json是一对协议的
-QWidget* MainDialog::CreateProtocal(const neb::CJsonObject& varJsonObject)
+QWidget* MainDialog::CreateProtocal(neb::CJsonObject& varJsonObject)
 {
     QGridLayout *protocalGridLayout = new QGridLayout();
     protocalGridLayout->setContentsMargins(QMargins());
@@ -127,24 +137,23 @@ QWidget* MainDialog::CreateProtocal(const neb::CJsonObject& varJsonObject)
     protocalGridLayout->setContentsMargins(10,10,10,10);
 
     //客户端协议信息,一条
-    if(varJsonObject.contains("Request"))
+    neb::CJsonObject requestJsonObject;
+    if(varJsonObject.Get("Request",requestJsonObject))
     {
         qDebug()<<"clientProtocal";
-        QJsonObject clientProtocalJsonObject= varJsonObject["Request"].toObject();
 
-
-        QWidget *clientProtocalWidget=this->CreateProtocalPart(tr("客户端"),clientProtocalJsonObject);
+        QWidget *clientProtocalWidget=this->CreateProtocalPart(tr("客户端"),requestJsonObject);
         protocalGridLayout->addWidget(clientProtocalWidget,0,0);
     }
 
     //服务器协议信息，多条
-    if(varJsonObject.contains("Return"))
+    neb::CJsonObject returnJsonObject;
+    if(varJsonObject.Get("Return",returnJsonObject))
     {
         qDebug()<<"serverProtocal";
-        QJsonArray serverProtocalJsonArray= varJsonObject["Return"].toArray();
-        for(int serverProtocalIndex = 0; serverProtocalIndex< serverProtocalJsonArray.size(); serverProtocalIndex++)
+        for(int serverProtocalIndex = 0; serverProtocalIndex< returnJsonObject.GetArraySize(); serverProtocalIndex++)
         {
-             QJsonObject serverProtocalJsonObject= serverProtocalJsonArray.at(serverProtocalIndex).toObject();
+             neb::CJsonObject serverProtocalJsonObject= returnJsonObject[serverProtocalIndex];
 
              QWidget *serverProtocalWidget=this->CreateProtocalPart(tr("服务端"),serverProtocalJsonObject);
              protocalGridLayout->addWidget(serverProtocalWidget,0+serverProtocalIndex,2);
@@ -152,23 +161,23 @@ QWidget* MainDialog::CreateProtocal(const neb::CJsonObject& varJsonObject)
 
         QPushButton* addServerPartPushButton=new QPushButton(tr("添加服务器返回消息"));
 
-        connect(addServerPartPushButton,&QPushButton::clicked,[=,&serverProtocalJsonArray]()
-        {
-            qDebug()<<"click add";
+//        connect(addServerPartPushButton,&QPushButton::clicked,[=,&serverProtocalJsonArray]()
+//        {
+//            qDebug()<<"click add";
 
-            //新建一个json节点
-            QJsonObject serverProtocalJsonObject=QJsonObject();
-            serverProtocalJsonObject.insert("GameMessageID","11");
-            serverProtocalJsonObject.insert("ProtoBuf","22");
-            serverProtocalJsonArray.append(QJsonValue(serverProtocalJsonObject));
-            QWidget *serverProtocalWidget=this->CreateProtocalPart(tr("服务端"),serverProtocalJsonObject);
+//            //新建一个json节点
+//            QJsonObject serverProtocalJsonObject=QJsonObject();
+//            serverProtocalJsonObject.insert("GameMessageID","11");
+//            serverProtocalJsonObject.insert("ProtoBuf","22");
+//            serverProtocalJsonArray.append(QJsonValue(serverProtocalJsonObject));
+//            QWidget *serverProtocalWidget=this->CreateProtocalPart(tr("服务端"),serverProtocalJsonObject);
 
-            protocalGridLayout->removeWidget(addServerPartPushButton);
+//            protocalGridLayout->removeWidget(addServerPartPushButton);
 
-            protocalGridLayout->addWidget(serverProtocalWidget,protocalGridLayout->rowCount(),2);
-            protocalGridLayout->addWidget(addServerPartPushButton,protocalGridLayout->rowCount(),2);
-        });
-        protocalGridLayout->addWidget(addServerPartPushButton,1+serverProtocalJsonArray.size(),2);
+//            protocalGridLayout->addWidget(serverProtocalWidget,protocalGridLayout->rowCount(),2);
+//            protocalGridLayout->addWidget(addServerPartPushButton,protocalGridLayout->rowCount(),2);
+//        });
+        protocalGridLayout->addWidget(addServerPartPushButton,1+returnJsonObject.GetArraySize(),2);
     }
 
     QFrame* containerWidget=new QFrame();
@@ -234,8 +243,9 @@ void MainDialog::CreateProtocalArray(const QString& varJsonFilePath)
         titleLineEdit->setPlaceholderText(tr("输入模块名，比如 背包系统"));
         titleLineEdit->setText(moduleNameQStr);
         titleLabel->setBuddy(titleLineEdit);
-        connect(titleLineEdit,&QLineEdit::textChanged,[=]
+        connect(titleLineEdit,&QLineEdit::textChanged,[this,moduleName,titleLineEdit]
         {
+            rootCJsonObject->Replace("Module",titleLineEdit->text().toStdString());
             this->SaveCurrentJsonFile();
         });
 
@@ -320,7 +330,7 @@ void MainDialog::on_filenameListView_doubleClicked()
 ///更新Json文件
 void MainDialog::SaveCurrentJsonFile()
 {
-    qDebug()<<"jsonDocument:\n"<<jsonDocument->toJson();
+    qDebug()<<"jsonDocument:\n"<<rootCJsonObject->ToString().data();
     //打开Json文件
 //    QFile jsonFile(filePath);
 
