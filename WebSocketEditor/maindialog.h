@@ -41,13 +41,23 @@ private:
     QLineEdit* addressLineEdit;
     QPushButton* connectButton;
     QPushButton* disconnectButton;
+    QPushButton* loginButton;
 
     QLineEdit* playeridLineEdit;
     QLineEdit* msgidLineEdit;
     QTextEdit* sendTextEdit;
+    QPushButton* sendButton;
 
     QLineEdit* receivedMsgidEdit;
     QTextEdit* receivedTextEdit;
+
+    QMap<QString, QString>* msgidNumberStrMap;
+
+    QStringList* ignoreMsgids;
+
+    ///历史列表
+    QListView* filenameListView;
+    QStandardItemModel* filenameModel;
 
 private:
     void Connect(const QString& varServerAddr);
@@ -55,12 +65,22 @@ private:
     void DisConnect();
 
     ///发送Json字符串给服务器
-    void Send(int varMsgID,const QString& varPlayerIDStr,const QString& varJsonStr);
+    void Send(const QString& varMsgIDStr,const QString& varPlayerIDStr,const QString& varJsonStr);
 
     void SaveJson();
 
     void CreateJson();
-private slots:
 
+    void LoadGameMessageJson();
+
+    ///保存当前发送的消息
+    void SaveMsg(const QString& varMsgIDStr,const QString& varJsonStr);
+
+    void RefreshHistoryFilelist();
+
+    void LoadOneHistory(const QString& varFileName);
+
+private slots:
+    void on_filenameListView_clicked(QModelIndex varModelIndex);
 };
 #endif // MAINWINDOW_H
