@@ -18,17 +18,13 @@ Dialog::Dialog(QWidget *parent)
     this->setAttribute(Qt::WA_TranslucentBackground);
 
     //添加搜索结果
-    toolsInfoListView=new QListView();
-    toolsInfoListView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    toolsInfoListView->setObjectName(QString::fromUtf8("toolsInfoListView"));
+    ui->toolsInfoListView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     pItemDelegate = new MuItemDelegate(this);
-    toolsInfoListView->setItemDelegate(pItemDelegate);
+    ui->toolsInfoListView->setItemDelegate(pItemDelegate);
 
     filenameModel= new QStandardItemModel(this);
-    toolsInfoListView->setModel(filenameModel);
-
-    ui->resultVerticalLayout->addWidget(toolsInfoListView);
+    ui->toolsInfoListView->setModel(filenameModel);
 
     //搜索Tools子目录 搜索所有的info.json文件
     this->SearchToolsInfoFile("./Tools");
@@ -40,8 +36,8 @@ Dialog::Dialog(QWidget *parent)
     this->RefreshListView(toolsInfoJsonList);
 
 
-    //通过控件 名称 来链接信号槽
-    QMetaObject::connectSlotsByName(this);
+    //通过控件 名称 来链接信号槽,自动生成的代码中已经有了，所以这里注释掉。
+    //QMetaObject::connectSlotsByName(this);
 }
 
 void Dialog::SearchToolsInfoFile(const QString& varDirPath)
@@ -138,7 +134,7 @@ void Dialog::RefreshListView(const QList<QJsonObject>& varJsonObjectList)
     }
 
     //更新ListView高度
-    toolsInfoListView->resize(toolsInfoListView->width(),varJsonObjectList.size()*52);
+    ui->toolsInfoListView->resize(ui->toolsInfoListView->width(),varJsonObjectList.size()*52);
 }
 
 Dialog::~Dialog()
@@ -148,7 +144,12 @@ Dialog::~Dialog()
 
 void Dialog::on_toolsInfoListView_clicked(QModelIndex varModelIndex)
 {
-    qDebug()<<"on_toolsInfoListView_clicked"<<varModelIndex.data();
+    if (varModelIndex.isValid()) {
+        QVariant var = varModelIndex.data(Qt::UserRole+1);
+        MuItemData itemData = var.value<MuItemData>();
+
+        qDebug()<<"on_toolsInfoListView_clicked:"<<itemData.toolName;
+    }
 }
 
 void Dialog::on_keywordLineEdit_textChanged(const QString &varText)
@@ -184,4 +185,27 @@ void Dialog::on_keywordLineEdit_textChanged(const QString &varText)
     }
     //更新匹配列表
     this->RefreshListView(toolsInfoJsonList_Keyword);
+}
+
+void Dialog::on_keywordLineEdit_BG_returnPressed()
+{
+    qDebug()<<"on_keywordLineEdit_BG_returnPressed";
+}
+
+void Dialog::on_keywordLineEdit_returnPressed()
+{
+    qDebug()<<"on_keywordLineEdit_returnPressed";
+    qDebug()<<"listview itemcount:"<<QString::number(filenameModel->rowCount());
+
+    ui->toolsInfoListView->setFocus();
+
+    if(filenameModel->rowCount()==1)
+    {
+        //输入框 按回车，如果只有1个匹配项，那就直接打开
+
+    }
+    else if(filenameModel->rowCount()>1)
+    {
+        //如果有多个匹配项，那就将焦点，传递到列表。
+    }
 }

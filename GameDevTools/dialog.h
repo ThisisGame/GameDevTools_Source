@@ -36,7 +36,6 @@ private:
 private:
     Ui::Dialog *ui;
 
-    QListView* toolsInfoListView;
     MuItemDelegate *pItemDelegate;
     QStandardItemModel* filenameModel;
 
@@ -46,5 +45,7 @@ private:
 private slots:
     void on_toolsInfoListView_clicked(QModelIndex varModelIndex);
     void on_keywordLineEdit_textChanged(const QString &arg1);
+    void on_keywordLineEdit_BG_returnPressed();
+    void on_keywordLineEdit_returnPressed();
 };
 #endif // DIALOG_H

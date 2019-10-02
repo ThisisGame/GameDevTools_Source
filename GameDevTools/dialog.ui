@@ -67,7 +67,11 @@
      <height>541</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="resultVerticalLayout"/>
+   <layout class="QVBoxLayout" name="resultVerticalLayout">
+    <item>
+     <widget class="QListView" name="toolsInfoListView"/>
+    </item>
+   </layout>
   </widget>
   <widget class="QLineEdit" name="keywordLineEdit">
    <property name="geometry">
