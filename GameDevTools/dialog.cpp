@@ -8,7 +8,7 @@
 
 Dialog::Dialog(QWidget *parent)
     : QDialog(parent)
-    , ui(new Ui::Dialog)
+    , ui(new Ui::Dialog),unzipWorking(false)
 {
     ui->setupUi(this);
 
@@ -137,6 +137,92 @@ void Dialog::RefreshListView(const QList<QJsonObject>& varJsonObjectList)
     ui->toolsInfoListView->resize(ui->toolsInfoListView->width(),varJsonObjectList.size()*52);
 }
 
+void Dialog::Ex_7z(const QJsonObject& jsonObject)
+{
+    if(this->unzipWorking)
+    {
+        qDebug()<<"unzipWorking";
+        return;
+    }
+    QString unzipExeFilePath = "7z.exe";
+    QFileInfo exeFileInfo=QFileInfo(unzipExeFilePath);
+    if(exeFileInfo.exists()==false)
+    {
+        qDebug()<<"zipfile not exist "<<unzipExeFilePath;
+        return;
+    }
+
+    //判断是否已经解压过
+    QFileInfo startFileInfo("./Tools/"+jsonObject["exepath"].toString());
+    if(startFileInfo.exists())
+    {
+        qDebug()<<"have unzip,return";
+        return;
+    }
+
+    QString zipFilePath="./Tools/"+jsonObject["7zfile"].toString();
+    QFileInfo zipFileInfo=QFileInfo(zipFilePath);
+    if(zipFileInfo.exists()==false)
+    {
+        qDebug()<<"zipfile not exist "<<zipFilePath;
+        return;
+    }
+
+    QString zipFileDirPath=zipFileInfo.absolutePath();
+    qDebug()<<"ex to "<<zipFileDirPath;
+
+
+    this->unzipWorking=true;
+    {
+        while(1)
+        {
+            QProcess zipProcess(this);
+
+            QStringList args;
+            args << "x" << zipFilePath << "-o" + zipFileDirPath << "-aoa";
+            qDebug()<<"args:"<<args;
+            //x:eXtract with full paths用文件的完整路径解压至当前目录或指定目录
+            //-o (Set Output Directory)
+            //-aoa 直接覆盖现有文件，而没有任何提示
+            zipProcess.start(unzipExeFilePath, args);
+
+            if(zipProcess.waitForStarted()==false)
+            {
+                qDebug()<<"start failed";
+                break;
+            }
+
+            zipProcess.waitForFinished(60000);
+            if (zipProcess.state() != QProcess::NotRunning) {
+                qDebug()<<"NotRunning";
+                break;
+            }
+
+            if (zipProcess.exitStatus() == QProcess::NormalExit) {
+                qDebug()<<"NormalExit";
+
+                break;
+            }
+            break;
+        }
+    }
+    this->unzipWorking=false;
+}
+
+void Dialog::Start(const QJsonObject& jsonObject)//启动工具
+{
+    //判断是否解压成功
+    QFileInfo startFileInfo("./Tools/"+jsonObject["exepath"].toString());
+    if(startFileInfo.exists()==false)
+    {
+        qDebug()<<"tool not exist;"<<startFileInfo.absoluteFilePath();
+        return;
+    }
+
+    QProcess toolProcess(this);
+    toolProcess.startDetached(startFileInfo.absoluteFilePath());
+}
+
 Dialog::~Dialog()
 {
     delete ui;
@@ -144,12 +230,7 @@ Dialog::~Dialog()
 
 void Dialog::on_toolsInfoListView_clicked(QModelIndex varModelIndex)
 {
-    if (varModelIndex.isValid()) {
-        QVariant var = varModelIndex.data(Qt::UserRole+1);
-        MuItemData itemData = var.value<MuItemData>();
 
-        qDebug()<<"on_toolsInfoListView_clicked:"<<itemData.toolName;
-    }
 }
 
 void Dialog::on_keywordLineEdit_textChanged(const QString &varText)
@@ -207,5 +288,23 @@ void Dialog::on_keywordLineEdit_returnPressed()
     else if(filenameModel->rowCount()>1)
     {
         //如果有多个匹配项，那就将焦点，传递到列表。
+    }
+}
+
+void Dialog::on_toolsInfoListView_doubleClicked(const QModelIndex &varModelIndex)
+{
+    if (varModelIndex.isValid()) {
+        QVariant var = varModelIndex.data(Qt::UserRole+1);
+        MuItemData itemData = var.value<MuItemData>();
+
+        qDebug()<<"on_toolsInfoListView_clicked:"<<itemData.toolName;
+
+        QJsonObject& jsonObject=itemData.jsonObject;
+        QString zipFilePathStr=jsonObject["7zfile"].toString();
+        qDebug()<<"unzip "<<zipFilePathStr;
+
+        this->Ex_7z(jsonObject);
+
+        this->Start(jsonObject);
     }
 }

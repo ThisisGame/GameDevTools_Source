@@ -33,6 +33,10 @@ private:
 
     void RefreshListView(const QList<QJsonObject>& varJsonObjectList);//刷新下拉框
 
+    void Ex_7z(const QJsonObject& jsonObject);//解压7z文件
+
+    void Start(const QJsonObject& jsonObject);//启动工具
+
 private:
     Ui::Dialog *ui;
 
@@ -42,10 +46,13 @@ private:
     QStringList toolsInfoJsonFilePathList;//工具 info.json 文件地址
 
     QList<QJsonObject> toolsInfoJsonList;//所有info.json 数据
+
+    bool unzipWorking;//是否在进行解压的工作。
 private slots:
     void on_toolsInfoListView_clicked(QModelIndex varModelIndex);
     void on_keywordLineEdit_textChanged(const QString &arg1);
     void on_keywordLineEdit_BG_returnPressed();
     void on_keywordLineEdit_returnPressed();
+    void on_toolsInfoListView_doubleClicked(const QModelIndex &index);
 };
 #endif // DIALOG_H
