@@ -33,5 +33,8 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-
+#设置exe icon图片
 RC_ICONS = logo.ico
+
+# 开启日志记录行号与函数名
+DEFINES += QT_MESSAGELOGCONTEXT

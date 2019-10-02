@@ -69,7 +69,14 @@
    </property>
    <layout class="QVBoxLayout" name="resultVerticalLayout">
     <item>
-     <widget class="QListView" name="toolsInfoListView"/>
+     <widget class="QListView" name="toolsInfoListView">
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

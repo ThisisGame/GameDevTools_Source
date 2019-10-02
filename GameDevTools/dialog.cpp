@@ -219,8 +219,11 @@ void Dialog::Start(const QJsonObject& jsonObject)//启动工具
         return;
     }
 
+    qDebug()<<"startDetached "<<startFileInfo.absoluteFilePath();
     QProcess toolProcess(this);
-    toolProcess.startDetached(startFileInfo.absoluteFilePath());
+    toolProcess.start(startFileInfo.absoluteFilePath());
+    toolProcess.waitForStarted(30000);
+    toolProcess.waitForFinished(60000);
 }
 
 Dialog::~Dialog()
@@ -257,12 +260,17 @@ void Dialog::on_keywordLineEdit_textChanged(const QString &varText)
             toolsInfoJsonList_Keyword.append(jsonObject);
             continue;
         }
-        QString keywordStr=jsonObject["keyword"].toString();
-        if(keywordStr.toLower().contains(lowerText))
+        QJsonArray keywordJsonArray=jsonObject["keyword"].toArray();
+        for(int keywordIndex=0;keywordIndex<keywordJsonArray.size();keywordIndex++)
         {
-            toolsInfoJsonList_Keyword.append(jsonObject);
-            continue;
+            QString keywordStr=keywordJsonArray[keywordIndex].toString();
+            if(keywordStr.toLower().contains(lowerText))
+            {
+                toolsInfoJsonList_Keyword.append(jsonObject);
+                continue;
+            }
         }
+
     }
     //更新匹配列表
     this->RefreshListView(toolsInfoJsonList_Keyword);
