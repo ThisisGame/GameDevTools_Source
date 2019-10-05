@@ -77,7 +77,7 @@ void OperationDialog::on_getmd5Button_clicked()
 
 void OperationDialog::on_compareButton_clicked()
 {
-    if(this->newTextEdit->toPlainText()==this->compareTextEdit->toPlainText())
+    if(this->newTextEdit->toPlainText().toLower()==this->compareTextEdit->toPlainText().toLower())
     {
         QMessageBox::about(this, "对比结果", "相同");
     }
