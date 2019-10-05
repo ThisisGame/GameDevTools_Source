@@ -10,7 +10,7 @@
 #include<QListView>
 #include"MuItemDelegate.h"
 #include<QStandardItemModel>
-
+#include<QSystemTrayIcon>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Dialog; }
@@ -25,6 +25,8 @@ class Dialog : public QDialog
 public:
     Dialog(QWidget *parent = nullptr);
     ~Dialog();
+
+    void keyPressEvent(QKeyEvent *) override;
 
 private:
     void SearchToolsInfoFile(const QString& varDirPath);//搜索所有的info.json文件
@@ -54,5 +56,6 @@ private slots:
     void on_keywordLineEdit_BG_returnPressed();
     void on_keywordLineEdit_returnPressed();
     void on_toolsInfoListView_doubleClicked(const QModelIndex &index);
+    void onSystemTrayIconClicked(QSystemTrayIcon::ActivationReason reason);
 };
 #endif // DIALOG_H

@@ -11,6 +11,8 @@ Dialog::Dialog(QWidget *parent)
     , ui(new Ui::Dialog),unzipWorking(false)
 {
     ui->setupUi(this);
+    setObjectName(tr("GameDevTools"));
+    setWindowTitle(tr("GameDevTools"));
 
     //去除边框 标题，这样设置后界面不能调整大小
     this->setWindowFlags(Qt::FramelessWindowHint);
@@ -38,6 +40,13 @@ Dialog::Dialog(QWidget *parent)
 
     //通过控件 名称 来链接信号槽,自动生成的代码中已经有了，所以这里注释掉。
     //QMetaObject::connectSlotsByName(this);
+
+    //右下角显示icon
+    QSystemTrayIcon* trayicon = new QSystemTrayIcon(this);
+    connect(trayicon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(onSystemTrayIconClicked(QSystemTrayIcon::ActivationReason)));
+    QIcon icon("./logo.trayico");
+    trayicon->setIcon(icon);
+    trayicon->show();
 }
 
 void Dialog::SearchToolsInfoFile(const QString& varDirPath)
@@ -314,5 +323,45 @@ void Dialog::on_toolsInfoListView_doubleClicked(const QModelIndex &varModelIndex
         this->Ex_7z(jsonObject);
 
         this->Start(jsonObject);
+    }
+}
+
+//实现槽函数
+void Dialog::onSystemTrayIconClicked(QSystemTrayIcon::ActivationReason reason)
+{
+    switch(reason)
+    {
+    //单击
+    case QSystemTrayIcon::Trigger:
+        //双击
+    case QSystemTrayIcon::DoubleClick:
+        if(this->isHidden())
+        {
+            //恢复窗口显示
+            this->show();
+            //一下两句缺一均不能有效将窗口置顶
+            this->setWindowState(Qt::WindowActive);
+            this->activateWindow();
+        }
+        else
+        {
+//            this->hide();
+        }
+        break;
+    default:
+        break;
+    }
+}
+
+void Dialog::keyPressEvent(QKeyEvent *event)
+{
+    switch (event->key())
+    {
+    case Qt::Key_Escape:
+        qDebug()<<"esc click";
+        this->hide();
+        break;
+    default:
+        QDialog::keyPressEvent(event);
     }
 }
