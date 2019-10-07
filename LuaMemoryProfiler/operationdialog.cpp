@@ -58,7 +58,8 @@ OperationDialog::OperationDialog(QWidget *parent)
 
 void OperationDialog::on_choosefileButton_clicked()
 {
-    QString strFilePath = QFileDialog::getOpenFileName(this, tr("选择文件"), "./","*.*");
+
+    QString strFilePath = QFileDialog::getOpenFileName(this, tr("选择文件"), "","*.*");
     if(strFilePath=="")
     {
         qDebug()<<"not choose file";
