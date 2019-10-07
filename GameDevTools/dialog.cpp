@@ -47,6 +47,12 @@ Dialog::Dialog(QWidget *parent)
     QIcon icon("./logo.trayico");
     trayicon->setIcon(icon);
     trayicon->show();
+
+    QMenu* trayMenu = new QMenu(this);
+    QAction* quitAction=new QAction(tr("退出"),this);
+    trayMenu->addAction(quitAction);
+    trayicon->setContextMenu(trayMenu);
+    QObject::connect(quitAction,SIGNAL(triggered()),this,SLOT(on_quitAction()));
 }
 
 void Dialog::SearchToolsInfoFile(const QString& varDirPath)
@@ -364,4 +370,10 @@ void Dialog::keyPressEvent(QKeyEvent *event)
     default:
         QDialog::keyPressEvent(event);
     }
+}
+
+void Dialog::on_quitAction()
+{
+    qDebug()<<"quitAction";
+    this->close();
 }

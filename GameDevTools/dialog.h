@@ -57,5 +57,6 @@ private slots:
     void on_keywordLineEdit_returnPressed();
     void on_toolsInfoListView_doubleClicked(const QModelIndex &index);
     void onSystemTrayIconClicked(QSystemTrayIcon::ActivationReason reason);
+    void on_quitAction();
 };
 #endif // DIALOG_H
