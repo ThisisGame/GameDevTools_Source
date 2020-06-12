@@ -1,0 +1,10 @@
+F:\Github\EncryptResources\EncryptResources\obj\Debug\EncryptResources_Xor.csprojAssemblyReference.cache
+F:\Github\EncryptResources\EncryptResources\obj\Debug\EncryptResources.Form1.resources
+F:\Github\EncryptResources\EncryptResources\obj\Debug\EncryptResources_Xor.csproj.GenerateResource.cache
+F:\Github\EncryptResources\EncryptResources\obj\Debug\EncryptResources_Xor.csproj.CoreCompileInputs.cache
+F:\Github\EncryptResources\EncryptResources\bin\Debug\EncryptResources_Xor.exe.config
+F:\Github\EncryptResources\EncryptResources\bin\Debug\EncryptResources_Xor.exe
+F:\Github\EncryptResources\EncryptResources\bin\Debug\EncryptResources_Xor.pdb
+F:\Github\EncryptResources\EncryptResources\obj\Debug\EncryptResources_Xor.Properties.Resources.resources
+F:\Github\EncryptResources\EncryptResources\obj\Debug\EncryptResources_Xor.exe
+F:\Github\EncryptResources\EncryptResources\obj\Debug\EncryptResources_Xor.pdb

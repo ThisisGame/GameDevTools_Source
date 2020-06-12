@@ -1,0 +1,9 @@
+D:\用户目录\我的文档\Visual Studio 2015\Projects\EncryptResources\EncryptResources\bin\Debug\EncryptResources.exe.config
+D:\用户目录\我的文档\Visual Studio 2015\Projects\EncryptResources\EncryptResources\bin\Debug\EncryptResources.exe
+D:\用户目录\我的文档\Visual Studio 2015\Projects\EncryptResources\EncryptResources\bin\Debug\EncryptResources.pdb
+D:\用户目录\我的文档\Visual Studio 2015\Projects\EncryptResources\EncryptResources\obj\Debug\EncryptResources.csprojResolveAssemblyReference.cache
+D:\用户目录\我的文档\Visual Studio 2015\Projects\EncryptResources\EncryptResources\obj\Debug\EncryptResources.Form1.resources
+D:\用户目录\我的文档\Visual Studio 2015\Projects\EncryptResources\EncryptResources\obj\Debug\EncryptResources.Properties.Resources.resources
+D:\用户目录\我的文档\Visual Studio 2015\Projects\EncryptResources\EncryptResources\obj\Debug\EncryptResources.csproj.GenerateResource.Cache
+D:\用户目录\我的文档\Visual Studio 2015\Projects\EncryptResources\EncryptResources\obj\Debug\EncryptResources.exe
+D:\用户目录\我的文档\Visual Studio 2015\Projects\EncryptResources\EncryptResources\obj\Debug\EncryptResources.pdb
