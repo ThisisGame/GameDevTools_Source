@@ -61,6 +61,8 @@ private:
 
     QList<QJsonObject> toolsInfoJsonList;//所有info.json 数据
 
+    QList<QJsonObject> toolsInfoJsonList_Keyword;//符合关键字的info.json 数据
+
     bool unzipWorking;//是否在进行解压的工作。
 
     DownloadManager downloadManager;//下载管理器

@@ -57,7 +57,7 @@
 using namespace std;
 
 DownloadManager::DownloadManager(QObject *parent)
-    : QObject(parent)
+    : QObject(parent),currentDownload(nullptr)
 {
 }
 
@@ -81,7 +81,7 @@ void DownloadManager::append(const QString &name,const QString &url,const QStrin
     }
 
     //判断是否是当前下载
-    if(currentDownload && currentDownload->url()==url)
+    if(currentDownload!=nullptr && currentDownload->isRunning() && currentDownload->url()==url)
     {
         qDebug()<<url<<" is downloading,cannot append.";
         return;
@@ -187,6 +187,7 @@ void DownloadManager::downloadFinished(const QString& name)
 
 
     currentDownload->deleteLater();
+    currentDownload=nullptr;
     startNextDownload();
 }
 

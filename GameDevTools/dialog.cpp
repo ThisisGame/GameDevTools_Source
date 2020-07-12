@@ -173,9 +173,11 @@ void Dialog::RefreshListView(const QList<QJsonObject>& varJsonObjectList)
         standardItem->setData(QVariant::fromValue(itemData),Qt::UserRole+1);
         filenameModel->appendRow(standardItem);
     }
-
     //更新ListView高度
     ui->toolsInfoListView->resize(ui->toolsInfoListView->width(),varJsonObjectList.size()*52);
+
+    //保存当前刷选的json 列表
+    toolsInfoJsonList_Keyword=varJsonObjectList;
 }
 
 bool Dialog::Exist_7z(const QJsonObject& jsonObject)//判断压缩文件是否存在;
@@ -313,9 +315,21 @@ void Dialog::ModifyState(const QString& varName,const int varState)//修改状�
         {
             jsonObject["state"]=varState;
             toolsInfoJsonList[i]=jsonObject;
+            break;
         }
     }
-    this->RefreshListView(toolsInfoJsonList);
+
+    for(int i=0;i<toolsInfoJsonList_Keyword.size();i++)
+    {
+        QJsonObject jsonObject=toolsInfoJsonList_Keyword.at(i);
+        if(jsonObject["name"]==varName)
+        {
+            jsonObject["state"]=varState;
+            toolsInfoJsonList_Keyword[i]=jsonObject;
+            break;
+        }
+    }
+    this->RefreshListView(toolsInfoJsonList_Keyword);
 }
 
 Dialog::~Dialog()
@@ -478,9 +492,22 @@ void Dialog::downloadProgress(const QString& name,qint64 bytesReceived, qint64 b
             jsonObject["bytesReceived"]=bytesReceived;
             jsonObject["bytesTotal"]=bytesTotal;
             toolsInfoJsonList[i]=jsonObject;
+            break;
         }
     }
-    this->RefreshListView(toolsInfoJsonList);
+
+    for(int i=0;i<toolsInfoJsonList_Keyword.size();i++)
+    {
+        QJsonObject jsonObject=toolsInfoJsonList_Keyword.at(i);
+        if(jsonObject["name"]==name)
+        {
+            jsonObject["bytesReceived"]=bytesReceived;
+            jsonObject["bytesTotal"]=bytesTotal;
+            toolsInfoJsonList_Keyword[i]=jsonObject;
+            break;
+        }
+    }
+    this->RefreshListView(toolsInfoJsonList_Keyword);
 }
 
 void Dialog::finishedOne(const QString& name)
