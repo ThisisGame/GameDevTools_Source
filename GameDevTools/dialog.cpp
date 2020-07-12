@@ -177,7 +177,7 @@ void Dialog::RefreshListView(const QList<QJsonObject>& varJsonObjectList)
     ui->toolsInfoListView->resize(ui->toolsInfoListView->width(),varJsonObjectList.size()*52);
 
     //保存当前刷选的json 列表
-    toolsInfoJsonList_Keyword=varJsonObjectList;
+//    toolsInfoJsonList_Keyword=varJsonObjectList;
 }
 
 bool Dialog::Exist_7z(const QJsonObject& jsonObject)//判断压缩文件是否存在;
@@ -319,17 +319,42 @@ void Dialog::ModifyState(const QString& varName,const int varState)//修改状�
         }
     }
 
-    for(int i=0;i<toolsInfoJsonList_Keyword.size();i++)
-    {
-        QJsonObject jsonObject=toolsInfoJsonList_Keyword.at(i);
-        if(jsonObject["name"]==varName)
+//    for(int i=0;i<toolsInfoJsonList_Keyword.size();i++)
+//    {
+//        QJsonObject jsonObject=toolsInfoJsonList_Keyword.at(i);
+//        if(jsonObject["name"]==varName)
+//        {
+//            jsonObject["state"]=varState;
+//            toolsInfoJsonList_Keyword[i]=jsonObject;
+//            break;
+//        }
+//    }
+//    this->RefreshListView(toolsInfoJsonList_Keyword);
+
+    //修改QStandardItemModel 数据
+    int rows = filenameModel->rowCount();//1
+    for (int i=0;i<rows;i++) {
+        QStandardItem* standardItem = filenameModel->item(i, 0);//1 1
+        if (standardItem)
         {
-            jsonObject["state"]=varState;
-            toolsInfoJsonList_Keyword[i]=jsonObject;
-            break;
+            QVariant var = standardItem->data();
+            MuItemData itemData = var.value<MuItemData>();
+
+            qDebug()<<"downloadProgress update model item data:"<<itemData.toolName;
+
+            QJsonObject& jsonObject=itemData.jsonObject;
+            if(jsonObject["name"]==varName)
+            {
+                jsonObject["state"]=varState;
+
+
+                itemData.jsonObject=jsonObject;
+                standardItem->setData(QVariant::fromValue(itemData),Qt::UserRole+1);
+
+                break;
+            }
         }
     }
-    this->RefreshListView(toolsInfoJsonList_Keyword);
 }
 
 Dialog::~Dialog()
@@ -373,7 +398,7 @@ void Dialog::on_keywordLineEdit_textChanged(const QString &varText)
             if(keywordStr.toLower().contains(lowerText))
             {
                 toolsInfoJsonList_Keyword.append(jsonObject);
-                continue;
+                break;
             }
         }
 
@@ -496,18 +521,44 @@ void Dialog::downloadProgress(const QString& name,qint64 bytesReceived, qint64 b
         }
     }
 
-    for(int i=0;i<toolsInfoJsonList_Keyword.size();i++)
-    {
-        QJsonObject jsonObject=toolsInfoJsonList_Keyword.at(i);
-        if(jsonObject["name"]==name)
+//    for(int i=0;i<toolsInfoJsonList_Keyword.size();i++)
+//    {
+//        QJsonObject jsonObject=toolsInfoJsonList_Keyword.at(i);
+//        if(jsonObject["name"]==name)
+//        {
+//            jsonObject["bytesReceived"]=bytesReceived;
+//            jsonObject["bytesTotal"]=bytesTotal;
+//            toolsInfoJsonList_Keyword[i]=jsonObject;
+//            break;
+//        }
+//    }
+//    this->RefreshListView(toolsInfoJsonList_Keyword);
+
+    //修改QStandardItemModel 数据
+    int rows = filenameModel->rowCount();//1
+    for (int i=0;i<rows;i++) {
+        QStandardItem* standardItem = filenameModel->item(i, 0);//1 1
+        if (standardItem)
         {
-            jsonObject["bytesReceived"]=bytesReceived;
-            jsonObject["bytesTotal"]=bytesTotal;
-            toolsInfoJsonList_Keyword[i]=jsonObject;
-            break;
+            QVariant var = standardItem->data();
+            MuItemData itemData = var.value<MuItemData>();
+
+            qDebug()<<"downloadProgress update model item data:"<<itemData.toolName;
+
+            QJsonObject& jsonObject=itemData.jsonObject;
+            if(jsonObject["name"]==name)
+            {
+                jsonObject["bytesReceived"]=bytesReceived;
+                jsonObject["bytesTotal"]=bytesTotal;
+
+
+                itemData.jsonObject=jsonObject;
+                standardItem->setData(QVariant::fromValue(itemData),Qt::UserRole+1);
+
+                break;
+            }
         }
     }
-    this->RefreshListView(toolsInfoJsonList_Keyword);
 }
 
 void Dialog::finishedOne(const QString& name)
