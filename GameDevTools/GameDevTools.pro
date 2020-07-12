@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -17,12 +17,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     MuItemDelegate.cpp \
+    downloadmanager.cpp \
     main.cpp \
     dialog.cpp
 
 HEADERS += \
     MuItemDelegate.h \
-    dialog.h
+    dialog.h \
+    downloadmanager.h
 
 FORMS += \
     dialog.ui \

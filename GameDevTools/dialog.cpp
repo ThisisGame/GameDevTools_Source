@@ -53,6 +53,9 @@ Dialog::Dialog(QWidget *parent)
     trayMenu->addAction(quitAction);
     trayicon->setContextMenu(trayMenu);
     QObject::connect(quitAction,SIGNAL(triggered()),this,SLOT(on_quitAction()));
+
+    QObject::connect(&downloadManager, SIGNAL(downloadingOne(const QString&,qint64,qint64,const QString&)), this, SLOT(downloadProgress(const QString&,qint64,qint64,const QString&)));
+    QObject::connect(&downloadManager, SIGNAL(finishedOne(const QString&)), this, SLOT(finishedOne(const QString&)));
 }
 
 void Dialog::SearchToolsInfoFile(const QString& varDirPath)
@@ -128,6 +131,29 @@ void Dialog::LoadToolsInfoJson()
             continue;
         }
 
+        //默认状态为未下载
+        int state=TOOL_STATE_NOT_DOWNLOAD;
+        if(this->Exist_Tool(rootObj))
+        {
+            state=TOOL_STATE_UNZIP_FINISH;
+        }
+        else
+        {
+            if(this->Exist_7z(rootObj))
+            {
+                state=TOOL_STATE_UNZIP;
+            }
+            else
+            {
+                state=TOOL_STATE_NOT_DOWNLOAD;
+            }
+        }
+        rootObj["state"]=state;
+
+
+        rootObj["bytesReceived"]=0;
+        rootObj["bytesTotal"]=0;
+
         toolsInfoJsonList.append(rootObj);
     }
 
@@ -152,19 +178,33 @@ void Dialog::RefreshListView(const QList<QJsonObject>& varJsonObjectList)
     ui->toolsInfoListView->resize(ui->toolsInfoListView->width(),varJsonObjectList.size()*52);
 }
 
-void Dialog::Ex_7z(const QJsonObject& jsonObject)
+bool Dialog::Exist_7z(const QJsonObject& jsonObject)//判断压缩文件是否存在;
+{
+    QString zipFilePath="./Tools/"+jsonObject["7zfile"].toString();
+    QFileInfo zipFileInfo=QFileInfo(zipFilePath);
+    return zipFileInfo.exists();
+}
+
+bool Dialog::Exist_Tool(const QJsonObject& jsonObject)//判断文件是否已经解压;
+{
+    //判断是否已经解压过
+    QFileInfo startFileInfo("./Tools/"+jsonObject["exepath"].toString());
+    return startFileInfo.exists();
+}
+
+int Dialog::Ex_7z(const QJsonObject& jsonObject)
 {
     if(this->unzipWorking)
     {
         qDebug()<<"unzipWorking";
-        return;
+        return -1;
     }
-    QString unzipExeFilePath = "7z.exe";
+    QString unzipExeFilePath = "./7z.exe";
     QFileInfo exeFileInfo=QFileInfo(unzipExeFilePath);
     if(exeFileInfo.exists()==false)
     {
-        qDebug()<<"zipfile not exist "<<unzipExeFilePath;
-        return;
+        qDebug()<<"7z.exe not exist "<<unzipExeFilePath;
+        return -1;
     }
 
     //判断是否已经解压过
@@ -172,15 +212,16 @@ void Dialog::Ex_7z(const QJsonObject& jsonObject)
     if(startFileInfo.exists())
     {
         qDebug()<<"have unzip,return";
-        return;
+        return 0;
     }
 
     QString zipFilePath="./Tools/"+jsonObject["7zfile"].toString();
     QFileInfo zipFileInfo=QFileInfo(zipFilePath);
     if(zipFileInfo.exists()==false)
     {
-        qDebug()<<"zipfile not exist "<<zipFilePath;
-        return;
+        qDebug()<<"zipfile not exist,go download "<<zipFilePath;
+        this->Download_7z(jsonObject);
+        return 1;
     }
 
     QString zipFileDirPath=zipFileInfo.absolutePath();
@@ -215,13 +256,35 @@ void Dialog::Ex_7z(const QJsonObject& jsonObject)
 
             if (zipProcess.exitStatus() == QProcess::NormalExit) {
                 qDebug()<<"NormalExit";
-
+                this->ModifyState(jsonObject["name"].toString(),TOOL_STATE_UNZIP_FINISH);
                 break;
             }
             break;
         }
     }
     this->unzipWorking=false;
+    return 0;
+}
+
+void Dialog::Download_7z(const QJsonObject& jsonObject)//下载7z文件
+{
+    //已经存在，不用下载
+    QString zipFilePath="./Tools/"+jsonObject["7zfile"].toString();
+    QFileInfo zipFileInfo=QFileInfo(zipFilePath);
+    if(zipFileInfo.exists())
+    {
+        qDebug()<<"zipfile exist,go unzip"<<zipFilePath;
+        this->Ex_7z(jsonObject);
+        return;
+    }
+
+    //下载队列
+    QString name=jsonObject["name"].toString();
+    QString zipUrl=jsonObject["7zurl"].toString();
+    downloadManager.append(name,zipUrl,zipFilePath);
+
+    //修改状态
+    this->ModifyState(jsonObject["name"].toString(),TOOL_STATE_DOWNLOADING);
 }
 
 void Dialog::Start(const QJsonObject& jsonObject)//启动工具
@@ -239,6 +302,20 @@ void Dialog::Start(const QJsonObject& jsonObject)//启动工具
     toolProcess.start(startFileInfo.absoluteFilePath());
     toolProcess.waitForStarted(30000);
     toolProcess.waitForFinished(60000);
+}
+
+void Dialog::ModifyState(const QString& varName,const int varState)//修改状态
+{
+    for(int i=0;i<toolsInfoJsonList.size();i++)
+    {
+        QJsonObject jsonObject=toolsInfoJsonList.at(i);
+        if(jsonObject["name"]==varName)
+        {
+            jsonObject["state"]=varState;
+            toolsInfoJsonList[i]=jsonObject;
+        }
+    }
+    this->RefreshListView(toolsInfoJsonList);
 }
 
 Dialog::~Dialog()
@@ -323,10 +400,16 @@ void Dialog::on_toolsInfoListView_doubleClicked(const QModelIndex &varModelIndex
         qDebug()<<"on_toolsInfoListView_clicked:"<<itemData.toolName;
 
         QJsonObject& jsonObject=itemData.jsonObject;
+
+
         QString zipFilePathStr=jsonObject["7zfile"].toString();
         qDebug()<<"unzip "<<zipFilePathStr;
 
-        this->Ex_7z(jsonObject);
+        if(this->Ex_7z(jsonObject)!=0)
+        {
+            //开始下载 直接返回
+            return;
+        }
 
         this->Start(jsonObject);
     }
@@ -364,6 +447,7 @@ void Dialog::keyPressEvent(QKeyEvent *event)
     switch (event->key())
     {
     case Qt::Key_Escape:
+    case Qt::Key_F4:
         qDebug()<<"esc click";
         this->hide();
         break;
@@ -376,4 +460,30 @@ void Dialog::on_quitAction()
 {
     qDebug()<<"quitAction";
     this->close();
+}
+
+void Dialog::downloadProgress(const QString& name,qint64 bytesReceived, qint64 bytesTotal,const QString& speedDesc)
+{
+    qDebug()<<"downloadProgress "<<name<<" "<<bytesReceived<<" "<<bytesTotal;
+
+    qDebug()<<"bytesReceived:"<<bytesReceived;
+    qDebug()<<"bytesTotal:"<<bytesTotal;
+
+
+    for(int i=0;i<toolsInfoJsonList.size();i++)
+    {
+        QJsonObject jsonObject=toolsInfoJsonList.at(i);
+        if(jsonObject["name"]==name)
+        {
+            jsonObject["bytesReceived"]=bytesReceived;
+            jsonObject["bytesTotal"]=bytesTotal;
+            toolsInfoJsonList[i]=jsonObject;
+        }
+    }
+    this->RefreshListView(toolsInfoJsonList);
+}
+
+void Dialog::finishedOne(const QString& name)
+{
+    this->ModifyState(name,TOOL_STATE_UNZIP);
 }

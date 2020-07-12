@@ -45,7 +45,7 @@ void MuItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
             painter->drawPath(path);
         }
 
-        // 绘制图片，歌手，数量位置区域
+        // 绘制工具名字，工具描述位置区域
         QRectF nameRect = QRect(rect.left()+5, rect.top()+5,  rect.width()-10, 20);
         QRectF descRect = QRect(nameRect.left(), nameRect.bottom()+5, rect.width()-10, 20);
 
@@ -54,7 +54,29 @@ void MuItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
         painter->setFont(QFont("等线", 10));
         if(itemData.jsonObject.contains("name"))
         {
-            painter->drawText(nameRect, itemData.jsonObject["name"].toString());
+            int state=itemData.jsonObject["state"].toInt();
+            switch(state)
+            {
+            case TOOL_STATE_NOT_DOWNLOAD:
+                painter->drawText(nameRect, itemData.jsonObject["name"].toString()+" 未下载");
+                break;
+            case TOOL_STATE_DOWNLOADING:
+            {
+                qint64 received=itemData.jsonObject["bytesReceived"].toInt();
+                qint64 total=itemData.jsonObject["bytesTotal"].toInt();
+                painter->drawText(nameRect, itemData.jsonObject["name"].toString()+" 下载中... "+QString::number(received/1000000.0, 'f', 2)+"/"+QString::number(total/1000000.0, 'f', 2)+"mb");
+                break;
+            }
+            case TOOL_STATE_UNZIP:
+//                painter->drawText(nameRect, itemData.jsonObject["name"].toString()+" 未解压");
+//                break;
+            case TOOL_STATE_UNZIPING:
+//                painter->drawText(nameRect, itemData.jsonObject["name"].toString()+" 解压中...");
+//                break;
+            case TOOL_STATE_UNZIP_FINISH:
+                painter->drawText(nameRect, itemData.jsonObject["name"].toString());
+                break;
+            }
         }
 
         painter->setPen(QPen(Qt::gray));

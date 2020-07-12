@@ -9,6 +9,9 @@
 #include <QDebug>
 #include<QDateTime>
 #include <iostream>
+
+#include <QtNetwork>
+
 using namespace std;
 
 //写入信息到文件
@@ -72,6 +75,8 @@ int main(int argc, char *argv[])
     //注册监听级别函数
     qInstallMessageHandler(myMessageOutput);
     qDebug()<<"Application start;";
+
+    qDebug() << QSslSocket::supportsSsl() << QSslSocket::sslLibraryBuildVersionString() << QSslSocket::sslLibraryVersionString();
 
     Dialog w;
     w.show();
