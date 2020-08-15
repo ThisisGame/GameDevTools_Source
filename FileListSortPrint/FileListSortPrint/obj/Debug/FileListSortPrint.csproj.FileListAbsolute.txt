@@ -1,0 +1,9 @@
+C:\Users\captain\source\repos\FileListSortPrint\FileListSortPrint\bin\Debug\FileListSortPrint.exe
+C:\Users\captain\source\repos\FileListSortPrint\FileListSortPrint\bin\Debug\FileListSortPrint.pdb
+C:\Users\captain\source\repos\FileListSortPrint\FileListSortPrint\obj\Debug\FileListSortPrint.csprojAssemblyReference.cache
+C:\Users\captain\source\repos\FileListSortPrint\FileListSortPrint\obj\Debug\FileListSortPrint.Form1.resources
+C:\Users\captain\source\repos\FileListSortPrint\FileListSortPrint\obj\Debug\FileListSortPrint.Properties.Resources.resources
+C:\Users\captain\source\repos\FileListSortPrint\FileListSortPrint\obj\Debug\FileListSortPrint.csproj.GenerateResource.cache
+C:\Users\captain\source\repos\FileListSortPrint\FileListSortPrint\obj\Debug\FileListSortPrint.csproj.CoreCompileInputs.cache
+C:\Users\captain\source\repos\FileListSortPrint\FileListSortPrint\obj\Debug\FileListSortPrint.exe
+C:\Users\captain\source\repos\FileListSortPrint\FileListSortPrint\obj\Debug\FileListSortPrint.pdb
