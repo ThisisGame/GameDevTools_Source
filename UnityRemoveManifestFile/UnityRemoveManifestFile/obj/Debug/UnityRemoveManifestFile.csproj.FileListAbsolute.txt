@@ -1,0 +1,9 @@
+C:\Users\captain\source\repos\UnityRemoveManifestFile\UnityRemoveManifestFile\bin\Debug\UnityRemoveManifestFile.exe
+C:\Users\captain\source\repos\UnityRemoveManifestFile\UnityRemoveManifestFile\bin\Debug\UnityRemoveManifestFile.pdb
+C:\Users\captain\source\repos\UnityRemoveManifestFile\UnityRemoveManifestFile\obj\Debug\UnityRemoveManifestFile.csprojAssemblyReference.cache
+C:\Users\captain\source\repos\UnityRemoveManifestFile\UnityRemoveManifestFile\obj\Debug\UnityRemoveManifestFile.Form1.resources
+C:\Users\captain\source\repos\UnityRemoveManifestFile\UnityRemoveManifestFile\obj\Debug\UnityRemoveManifestFile.Properties.Resources.resources
+C:\Users\captain\source\repos\UnityRemoveManifestFile\UnityRemoveManifestFile\obj\Debug\UnityRemoveManifestFile.csproj.GenerateResource.cache
+C:\Users\captain\source\repos\UnityRemoveManifestFile\UnityRemoveManifestFile\obj\Debug\UnityRemoveManifestFile.csproj.CoreCompileInputs.cache
+C:\Users\captain\source\repos\UnityRemoveManifestFile\UnityRemoveManifestFile\obj\Debug\UnityRemoveManifestFile.exe
+C:\Users\captain\source\repos\UnityRemoveManifestFile\UnityRemoveManifestFile\obj\Debug\UnityRemoveManifestFile.pdb
