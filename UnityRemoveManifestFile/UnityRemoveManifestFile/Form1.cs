@@ -46,7 +46,7 @@ namespace UnityRemoveManifestFile
             }
 
             //复制到新文件夹
-            string newDirPath = chooseDirPath+"_ClearAt_" + DateTime.Now.ToString("yyyyMMddHHmmss");
+            string newDirPath =Path.GetDirectoryName(chooseDirPath) + Path.DirectorySeparatorChar + "Clear_" + DateTime.Now.ToString("yyyyMMddHHmmss") + Path.DirectorySeparatorChar + Path.GetFileName(chooseDirPath);
 
             //要复制以当前文件夹名字命名的Manifest
             string dirName = Path.GetFileName(chooseDirPath);
