@@ -85,7 +85,7 @@ namespace PickDiff
 
         private void buttonPick_Click(object sender, EventArgs e)
         {
-            generateDirPath =  chooseNewDirPath+ "_Pick_" + DateTime.Now.ToString("yyyyMMddHHmmss");
+            generateDirPath = Path.GetDirectoryName( chooseNewDirPath) + Path.DirectorySeparatorChar + "Pick_" + DateTime.Now.ToString("yyyyMMddHHmmss")+ Path.DirectorySeparatorChar+Path.GetFileName(chooseNewDirPath);
 
             //获取新文件夹文件列表
             string[] newFilePathArr = Directory.GetFiles(chooseNewDirPath, "*.*",SearchOption.AllDirectories);
