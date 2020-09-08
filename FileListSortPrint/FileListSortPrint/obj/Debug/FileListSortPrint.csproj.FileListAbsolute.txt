@@ -7,3 +7,12 @@ C:\Users\captain\source\repos\FileListSortPrint\FileListSortPrint\obj\Debug\File
 C:\Users\captain\source\repos\FileListSortPrint\FileListSortPrint\obj\Debug\FileListSortPrint.csproj.CoreCompileInputs.cache
 C:\Users\captain\source\repos\FileListSortPrint\FileListSortPrint\obj\Debug\FileListSortPrint.exe
 C:\Users\captain\source\repos\FileListSortPrint\FileListSortPrint\obj\Debug\FileListSortPrint.pdb
+F:\GameDevTools_Source\FileListSortPrint\FileListSortPrint\bin\Debug\FileListSortPrint.exe
+F:\GameDevTools_Source\FileListSortPrint\FileListSortPrint\bin\Debug\FileListSortPrint.pdb
+F:\GameDevTools_Source\FileListSortPrint\FileListSortPrint\obj\Debug\FileListSortPrint.csprojAssemblyReference.cache
+F:\GameDevTools_Source\FileListSortPrint\FileListSortPrint\obj\Debug\FileListSortPrint.Form1.resources
+F:\GameDevTools_Source\FileListSortPrint\FileListSortPrint\obj\Debug\FileListSortPrint.Properties.Resources.resources
+F:\GameDevTools_Source\FileListSortPrint\FileListSortPrint\obj\Debug\FileListSortPrint.csproj.GenerateResource.cache
+F:\GameDevTools_Source\FileListSortPrint\FileListSortPrint\obj\Debug\FileListSortPrint.csproj.CoreCompileInputs.cache
+F:\GameDevTools_Source\FileListSortPrint\FileListSortPrint\obj\Debug\FileListSortPrint.exe
+F:\GameDevTools_Source\FileListSortPrint\FileListSortPrint\obj\Debug\FileListSortPrint.pdb
