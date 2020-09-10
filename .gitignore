@@ -49,3 +49,5 @@ compile_commands.json
 *creator.user*
 
 .vs
+/GameAreaMysqlMerge/PickDiff/bin
+/GameAreaMysqlMerge/PickDiff/obj
