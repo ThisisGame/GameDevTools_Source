@@ -168,18 +168,20 @@ namespace PickDiff
 
         private void buttonCreateDB_Click(object sender, EventArgs e)
         {
-            string connstr = "data source=localhost;user id=root;password=111111;pooling=false;charset=utf8";//pooling代表是否使用连接池
-            MySqlConnection conn = new MySqlConnection(connstr);
+            //string connstr = "data source=localhost;user id=root;password=111111;pooling=false;charset=utf8";//pooling代表是否使用连接池
+            //MySqlConnection conn = new MySqlConnection(connstr);
 
-            //创建数据库的执行语句
-            MySqlCommand cmd = new MySqlCommand("CREATE DATABASE `test` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci", conn);
-            conn.Open();
-            //执行语句
-            int res = cmd.ExecuteNonQuery();
+            ////创建数据库的执行语句
+            //MySqlCommand cmd = new MySqlCommand("CREATE DATABASE `test` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci", conn);
+            //conn.Open();
+            ////执行语句
+            //int res = cmd.ExecuteNonQuery();
 
-            conn.Close();
+            //conn.Close();
 
-            CreateTable();
+            //CreateTable();
+
+            LoadTables();
         }
 
         private void CreateTable()
@@ -195,6 +197,44 @@ namespace PickDiff
             int res = cmd.ExecuteNonQuery();
 
             conn.Close();
+        }
+
+        public class MyTable
+        {
+            public string Table { get; set; }
+            public List<string> ColumnList { get; set; } = new List<string>();
+        }
+
+        /// <summary>
+        /// 获取所有表名
+        /// </summary>
+        private void LoadTables()
+        {
+            string connstr = "data source=127.0.0.1;user id=root;password=YLTX20200706.;pooling=false;charset=utf8mb4";//pooling代表是否使用连接池
+            MySqlConnection conn = new MySqlConnection(connstr);
+
+            Dictionary<string, MyTable> dic = new Dictionary<string, MyTable>();
+            MySqlCommand cmd = conn.CreateCommand();
+            cmd.CommandText = "select table_name, column_name from information_schema.columns where table_schema = 'platform';";
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    string table = reader.GetString("table_name");
+                    string column = reader.GetString("column_name");
+                    if (dic.ContainsKey(table))
+                    {
+                        dic[table].ColumnList.Add(column);
+                    }
+                    else
+                    {
+                        MyTable t = new MyTable();
+                        t.Table = table;
+                        t.ColumnList.Add(column);
+                        dic.Add(t.Table, t);
+                    }
+                }
+            }
         }
     }
 }
