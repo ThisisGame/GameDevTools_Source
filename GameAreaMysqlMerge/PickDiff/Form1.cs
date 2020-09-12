@@ -17,7 +17,6 @@ namespace PickDiff
 {
     public partial class Form1 : Form
     {
-        private string configFilePath;
 
         private class Config
         {
@@ -26,7 +25,7 @@ namespace PickDiff
                 public string tableName;
                 public string[] columns;
                 /// <summary>
-                /// 解决方式 1.AddServerTag  2.CopyLeft 3.CopyRight 4.AutoIncrReset 自增的字段不赋值
+                /// 解决方式 1.AddServerTag  2.UseLast 仅复制最后一个数据库的 3.AutoIncrReset 自增的字段不赋值
                 /// </summary>
                 public string resolveType;
             }
@@ -41,6 +40,16 @@ namespace PickDiff
         private int mProgressValue = 0;
 
         private Queue<string> logQueue = new Queue<string>();
+
+        /// <summary>
+        /// 数据库对应的前缀 例如1_gamedb  2_gamedb合并的时候某个表有冲突，那么就在数据前面添加  "S1."  这样的前缀。
+        /// </summary>
+        private Dictionary<string, string> mDBServerTag = new Dictionary<string, string>();
+
+        /// <summary>
+        /// 临时表前缀
+        /// </summary>
+        private string TmpTablePrefix = "tmp_";
 
         public Form1()
         {
@@ -84,42 +93,6 @@ namespace PickDiff
         private void comboBoxChooseDB1_SelectedIndexChanged(object sender, EventArgs e)
         {
             mDBName1= comboBoxChooseDB1.SelectedItem.ToString();
-
-            //listBoxAllTable.Items.Clear();
-
-            //string connstr = "data source=localhost;user id=root;password=111111;pooling=false;charset=utf8";//pooling代表是否使用连接池
-            //MySqlConnection conn = new MySqlConnection(connstr);
-            //conn.Open();
-
-            ////获取所有table以及对应的字段名。
-            //Dictionary<string, MyTable> dic = new Dictionary<string, MyTable>();
-            //string newTableCMD = "select table_name, column_name from information_schema.columns where table_schema = '"+ dbName+"';";
-            //MySqlCommand cmd = new MySqlCommand(newTableCMD, conn);
-            //using (MySqlDataReader reader = cmd.ExecuteReader())
-            //{
-            //    while (reader.Read())
-            //    {
-            //        string table = reader.GetString("table_name");
-            //        string column = reader.GetString("column_name");
-            //        if (dic.ContainsKey(table))
-            //        {
-            //            dic[table].ColumnList.Add(column);
-            //        }
-            //        else
-            //        {
-            //            MyTable t = new MyTable();
-            //            t.Table = table;
-            //            t.ColumnList.Add(column);
-            //            dic.Add(t.Table, t);
-            //        }
-            //    }
-            //}
-            //conn.Close();
-
-            //foreach (var item in dic)
-            //{
-            //    listBoxAllTable.Items.Add(item.Key);
-            //}
         }
 
         /// <summary>
@@ -139,6 +112,10 @@ namespace PickDiff
 
         private void buttonMerge_Click(object sender, EventArgs e)
         {
+            //收集数据库前缀
+            mDBServerTag.Add(mDBName1, textBoxDB1ServerTag.Text);
+            mDBServerTag.Add(mDBName2, textBoxDB2ServerTag.Text);
+
             ThreadPool.QueueUserWorkItem(MergeInThread);
         }
 
@@ -242,7 +219,7 @@ namespace PickDiff
             string cmdStr = "";
             if(temp)
             {
-                cmdStr = "create TEMPORARY table " + mergeDBName + ".tmp_" + tableNameStr + " like " + dbName + "." + tableNameStr + ";";
+                cmdStr = "create TEMPORARY table " + mergeDBName + "."+TmpTablePrefix + tableNameStr + " like " + dbName + "." + tableNameStr + ";";
             }
             else
             {
@@ -324,13 +301,13 @@ namespace PickDiff
         /// 复制一个表的数据
         /// </summary>
         /// <param name="conn"></param>
-        /// <param name="mergeDBName"></param>
-        /// <param name="tableNameStr"></param>
-        /// <param name="dbName"></param>
+        /// <param name="targetDBName"></param>
+        /// <param name="targetTableName"></param>
+        /// <param name="srcDBName"></param>
         /// <returns></returns>
-        private bool CopyTableData(MySqlConnection conn,string mergeDBName,string tableNameStr,string dbName, bool temp = false)
+        private bool CopyTableData(MySqlConnection conn,string targetDBName,string targetTableName,string srcDBName,string srcTableName)
         {
-            string cmdStr = "INSERT INTO " + mergeDBName + ".tmp_" + tableNameStr + " SELECT * FROM " + dbName + "." + tableNameStr + ";";
+            string cmdStr = "INSERT INTO " + targetDBName +"."+ targetTableName + " SELECT * FROM " + srcDBName + "." + srcTableName + ";";
             MySqlCommand cmd = CreateMySqlCommand(cmdStr, conn);
 
             try
@@ -352,13 +329,13 @@ namespace PickDiff
         /// 在临时表中，对字段添加前缀
         /// </summary>
         /// <param name="conn"></param>
-        /// <param name="mergeDBName"></param>
-        /// <param name="tableNameStr"></param>
+        /// <param name="dbName"></param>
+        /// <param name="tableName"></param>
         /// <param name="dbName"></param>
         /// <returns></returns>
-        private bool AddServerTag(MySqlConnection conn, string mergeDBName, string tableNameStr, string dbName, string columnName,string serverTag)
+        private bool AddServerTagInTmpTable(MySqlConnection conn, string dbName, string tableName,string columnName,string serverTag)
         {
-            string cmdStr = "update "+ mergeDBName + ".tmp_"+ tableNameStr+" set "+ columnName +"= CONCAT('"+ serverTag+".',"+ columnName+"); ";
+            string cmdStr = "update "+ dbName + "."+ tableName+" set "+ columnName +"= CONCAT('"+ serverTag+"',"+ columnName+"); ";
             MySqlCommand cmd = CreateMySqlCommand(cmdStr, conn);
 
             try
@@ -375,6 +352,31 @@ namespace PickDiff
             }
         }
 
+        /// <summary>
+        /// 删除表
+        /// </summary>
+        /// <param name="conn"></param>
+        /// <param name="dbName"></param>
+        /// <param name="tableName"></param>
+        /// <returns></returns>
+        private bool DropTable(MySqlConnection conn, string dbName, string tableName)
+        {
+            string cmdStr = "drop table "+ dbName + "."+ tableName + ";";
+            MySqlCommand cmd = CreateMySqlCommand(cmdStr, conn);
+
+            try
+            {
+                //执行语句
+                int res = cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(cmdStr + Environment.NewLine + ex.ToString());
+                conn.Close();
+                return false;
+            }
+        }
 
         /// <summary>
         /// 复制表数据
@@ -389,61 +391,69 @@ namespace PickDiff
             MySqlConnection conn = CreteConnection();
             conn.Open();
 
-            string[] dbNameArr = new string[2] { mDBName1, mDBName2 };
-
             List<string> tableNameList = tableStructDic.Keys.ToList();
-            for (int tableNameIndex = 0; tableNameIndex < tableNameList.Count; tableNameIndex++)
+
+            //按顺序对2个DB执行以下操作
+            foreach (var item in mDBServerTag)
             {
-                UpdateProgressValue(tableNameIndex, tableNameList.Count);
+                string dbName = item.Key;
+                string serverTag = item.Value;
 
-                string tableNameStr = tableNameList[tableNameIndex];
-
-                Config.ConflictTable conflictTable = CheckTableConflict(tableNameStr);
-
-                if(conflictTable==null)
+                for (int tableNameIndex = 0; tableNameIndex < tableNameList.Count; tableNameIndex++)
                 {
-                    //对于不会冲突的表，直接复制插入
-                    for (int i = 0; i < dbNameArr.Length; i++)
-                    {
-                        string dbName = dbNameArr[i];
+                    UpdateProgressValue(tableNameIndex, tableNameList.Count);
 
-                        if(CopyTableData(conn,mergeDBName,tableNameStr,dbName)==false)
+                    string tableName = tableNameList[tableNameIndex];
+                    string mergeDBTmpTableName = TmpTablePrefix + tableName;
+
+                    //1.创建临时表
+                    if(CloneTableStruct(conn, mergeDBName, tableName, dbName, true)==false)
+                    {
+                        return false;
+                    }
+                    //2.复制数据到临时表
+                    if(CopyTableData(conn, mergeDBName, mergeDBTmpTableName,dbName,tableName)==false)
+                    {
+                        return false;
+                    }
+                    //3.处理冲突
+                    Config.ConflictTable conflictTable = CheckTableConflict(tableName);
+                    if (conflictTable != null)
+                    {
+                        //对于会冲突的表,根据配置的处理方式进行处理
+                        switch (conflictTable.resolveType)
                         {
-                            return false;
+                            case "AddServerTag":
+                                {
+                                    //暂时只处理一个字段
+                                    if(AddServerTagInTmpTable(conn, mergeDBName, mergeDBTmpTableName, conflictTable.columns[0], serverTag)==false)
+                                    {
+                                        return false;
+                                    }
+                                }
+                                break;
+                            case "UseLast":
+                                {
+                                    //仅复制最后一个数据库的
+
+                                }
+                                break;
+                            default:
+                                break;
                         }
                     }
-                }
-                else
-                {
-                    //对于会冲突的表,根据配置的处理方式进行处理
-                    switch (conflictTable.resolveType)
+                    //4.复制临时表数据到正式表
+                    if(CopyTableData(conn, mergeDBName, tableName, mergeDBName, mergeDBTmpTableName)==false)
                     {
-                        case "AddServerTag":
-                            {
-                                for (int i = 0; i < dbNameArr.Length; i++)
-                                {
-                                    string dbName = dbNameArr[i];
-
-                                    //1.创建临时表
-                                    CloneTableStruct(conn, mergeDBName, tableNameStr, dbName, true);
-                                    //2.复制数据到临时表
-                                    CopyTableData(conn, mergeDBName, tableNameStr, dbName,true);
-                                    //3.对冲突字段添加前缀
-                                    AddServerTag(conn, mergeDBName, tableNameStr, dbName, conflictTable.columns[0], "S" + i + ".");//这个前缀应该在界面上配置好。
-                                }
-
-
-
-                            }
-                            break;
-                        default:
-                            break;
+                        return false;
                     }
-
+                    //5.删除临时表
+                    if(DropTable(conn,mergeDBName,mergeDBTmpTableName)==false)
+                    {
+                        return false;
+                    }
                 }
-               
             }
-
             return true;
         }
 
