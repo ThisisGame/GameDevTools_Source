@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29926.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameAreaMysqlMerge", "PickDiff\GameAreaMysqlMerge.csproj", "{FE031F04-9EFE-4CD6-8946-A775A4E12609}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MysqlMerge", "MysqlMerge\MysqlMerge.csproj", "{FE031F04-9EFE-4CD6-8946-A775A4E12609}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

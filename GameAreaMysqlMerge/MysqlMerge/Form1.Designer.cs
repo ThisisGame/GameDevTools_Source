@@ -56,16 +56,16 @@
             // 
             // textBoxHost
             // 
-            this.textBoxHost.Location = new System.Drawing.Point(90, 28);
+            this.textBoxHost.Location = new System.Drawing.Point(90, 13);
             this.textBoxHost.Name = "textBoxHost";
-            this.textBoxHost.Size = new System.Drawing.Size(100, 21);
+            this.textBoxHost.Size = new System.Drawing.Size(154, 21);
             this.textBoxHost.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft YaHei UI Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label1.Location = new System.Drawing.Point(36, 28);
+            this.label1.Location = new System.Drawing.Point(36, 13);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(48, 21);
             this.label1.TabIndex = 1;
@@ -75,7 +75,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft YaHei UI Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label2.Location = new System.Drawing.Point(36, 55);
+            this.label2.Location = new System.Drawing.Point(36, 40);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(44, 21);
             this.label2.TabIndex = 3;
@@ -83,16 +83,16 @@
             // 
             // textBoxPort
             // 
-            this.textBoxPort.Location = new System.Drawing.Point(90, 55);
+            this.textBoxPort.Location = new System.Drawing.Point(90, 40);
             this.textBoxPort.Name = "textBoxPort";
-            this.textBoxPort.Size = new System.Drawing.Size(100, 21);
+            this.textBoxPort.Size = new System.Drawing.Size(154, 21);
             this.textBoxPort.TabIndex = 2;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft YaHei UI Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label3.Location = new System.Drawing.Point(36, 82);
+            this.label3.Location = new System.Drawing.Point(36, 67);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(47, 21);
             this.label3.TabIndex = 5;
@@ -100,16 +100,16 @@
             // 
             // textBoxUser
             // 
-            this.textBoxUser.Location = new System.Drawing.Point(90, 82);
+            this.textBoxUser.Location = new System.Drawing.Point(90, 67);
             this.textBoxUser.Name = "textBoxUser";
-            this.textBoxUser.Size = new System.Drawing.Size(100, 21);
+            this.textBoxUser.Size = new System.Drawing.Size(154, 21);
             this.textBoxUser.TabIndex = 4;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft YaHei UI Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label4.Location = new System.Drawing.Point(36, 109);
+            this.label4.Location = new System.Drawing.Point(36, 94);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(46, 21);
             this.label4.TabIndex = 7;
@@ -117,16 +117,16 @@
             // 
             // textBoxPass
             // 
-            this.textBoxPass.Location = new System.Drawing.Point(90, 109);
+            this.textBoxPass.Location = new System.Drawing.Point(90, 94);
             this.textBoxPass.Name = "textBoxPass";
-            this.textBoxPass.Size = new System.Drawing.Size(100, 21);
+            this.textBoxPass.Size = new System.Drawing.Size(154, 21);
             this.textBoxPass.TabIndex = 6;
             // 
             // buttonConnect
             // 
-            this.buttonConnect.Location = new System.Drawing.Point(90, 136);
+            this.buttonConnect.Location = new System.Drawing.Point(90, 121);
             this.buttonConnect.Name = "buttonConnect";
-            this.buttonConnect.Size = new System.Drawing.Size(100, 23);
+            this.buttonConnect.Size = new System.Drawing.Size(154, 23);
             this.buttonConnect.TabIndex = 8;
             this.buttonConnect.Text = "Connect";
             this.buttonConnect.UseVisualStyleBackColor = true;
@@ -136,9 +136,9 @@
             // 
             this.comboBoxChooseDB1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxChooseDB1.FormattingEnabled = true;
-            this.comboBoxChooseDB1.Location = new System.Drawing.Point(90, 183);
+            this.comboBoxChooseDB1.Location = new System.Drawing.Point(90, 168);
             this.comboBoxChooseDB1.Name = "comboBoxChooseDB1";
-            this.comboBoxChooseDB1.Size = new System.Drawing.Size(100, 20);
+            this.comboBoxChooseDB1.Size = new System.Drawing.Size(154, 20);
             this.comboBoxChooseDB1.TabIndex = 9;
             this.comboBoxChooseDB1.SelectedIndexChanged += new System.EventHandler(this.comboBoxChooseDB1_SelectedIndexChanged);
             // 
@@ -146,7 +146,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft YaHei UI Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label5.Location = new System.Drawing.Point(38, 183);
+            this.label5.Location = new System.Drawing.Point(38, 168);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(41, 21);
             this.label5.TabIndex = 10;
@@ -158,9 +158,9 @@
             this.listBoxLogs.Items.AddRange(new object[] {
             "日志列表",
             "按键盘的 C 复制选中行"});
-            this.listBoxLogs.Location = new System.Drawing.Point(208, 28);
+            this.listBoxLogs.Location = new System.Drawing.Point(250, 13);
             this.listBoxLogs.Name = "listBoxLogs";
-            this.listBoxLogs.Size = new System.Drawing.Size(649, 340);
+            this.listBoxLogs.Size = new System.Drawing.Size(649, 352);
             this.listBoxLogs.TabIndex = 12;
             this.listBoxLogs.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listBoxLogs_KeyDown);
             // 
@@ -168,7 +168,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft YaHei UI Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label6.Location = new System.Drawing.Point(38, 257);
+            this.label6.Location = new System.Drawing.Point(38, 242);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(44, 21);
             this.label6.TabIndex = 14;
@@ -178,17 +178,17 @@
             // 
             this.comboBoxChooseDB2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxChooseDB2.FormattingEnabled = true;
-            this.comboBoxChooseDB2.Location = new System.Drawing.Point(90, 257);
+            this.comboBoxChooseDB2.Location = new System.Drawing.Point(90, 242);
             this.comboBoxChooseDB2.Name = "comboBoxChooseDB2";
-            this.comboBoxChooseDB2.Size = new System.Drawing.Size(100, 20);
+            this.comboBoxChooseDB2.Size = new System.Drawing.Size(154, 20);
             this.comboBoxChooseDB2.TabIndex = 13;
             this.comboBoxChooseDB2.SelectedIndexChanged += new System.EventHandler(this.comboBoxChooseDB2_SelectedIndexChanged);
             // 
             // buttonMerge
             // 
-            this.buttonMerge.Location = new System.Drawing.Point(90, 388);
+            this.buttonMerge.Location = new System.Drawing.Point(90, 342);
             this.buttonMerge.Name = "buttonMerge";
-            this.buttonMerge.Size = new System.Drawing.Size(100, 23);
+            this.buttonMerge.Size = new System.Drawing.Size(154, 23);
             this.buttonMerge.TabIndex = 15;
             this.buttonMerge.Text = "Merge";
             this.buttonMerge.UseVisualStyleBackColor = true;
@@ -198,7 +198,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft YaHei UI Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label7.Location = new System.Drawing.Point(1, 347);
+            this.label7.Location = new System.Drawing.Point(1, 308);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(83, 21);
             this.label7.TabIndex = 17;
@@ -206,16 +206,16 @@
             // 
             // textBoxMergeDBName
             // 
-            this.textBoxMergeDBName.Location = new System.Drawing.Point(90, 347);
+            this.textBoxMergeDBName.Location = new System.Drawing.Point(90, 308);
             this.textBoxMergeDBName.Name = "textBoxMergeDBName";
-            this.textBoxMergeDBName.Size = new System.Drawing.Size(100, 21);
+            this.textBoxMergeDBName.Size = new System.Drawing.Size(154, 21);
             this.textBoxMergeDBName.TabIndex = 16;
             // 
             // progressBarMerge
             // 
-            this.progressBarMerge.Location = new System.Drawing.Point(5, 434);
+            this.progressBarMerge.Location = new System.Drawing.Point(5, 371);
             this.progressBarMerge.Name = "progressBarMerge";
-            this.progressBarMerge.Size = new System.Drawing.Size(185, 23);
+            this.progressBarMerge.Size = new System.Drawing.Size(894, 13);
             this.progressBarMerge.TabIndex = 18;
             // 
             // timer1
@@ -228,7 +228,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft YaHei UI Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label8.Location = new System.Drawing.Point(6, 211);
+            this.label8.Location = new System.Drawing.Point(6, 196);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(73, 21);
             this.label8.TabIndex = 20;
@@ -236,16 +236,16 @@
             // 
             // textBoxDB1ServerTag
             // 
-            this.textBoxDB1ServerTag.Location = new System.Drawing.Point(90, 211);
+            this.textBoxDB1ServerTag.Location = new System.Drawing.Point(90, 196);
             this.textBoxDB1ServerTag.Name = "textBoxDB1ServerTag";
-            this.textBoxDB1ServerTag.Size = new System.Drawing.Size(100, 21);
+            this.textBoxDB1ServerTag.Size = new System.Drawing.Size(154, 21);
             this.textBoxDB1ServerTag.TabIndex = 19;
             // 
             // label10
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft YaHei UI Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label10.Location = new System.Drawing.Point(6, 284);
+            this.label10.Location = new System.Drawing.Point(6, 269);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(76, 21);
             this.label10.TabIndex = 24;
@@ -253,16 +253,16 @@
             // 
             // textBoxDB2ServerTag
             // 
-            this.textBoxDB2ServerTag.Location = new System.Drawing.Point(90, 284);
+            this.textBoxDB2ServerTag.Location = new System.Drawing.Point(90, 269);
             this.textBoxDB2ServerTag.Name = "textBoxDB2ServerTag";
-            this.textBoxDB2ServerTag.Size = new System.Drawing.Size(100, 21);
+            this.textBoxDB2ServerTag.Size = new System.Drawing.Size(154, 21);
             this.textBoxDB2ServerTag.TabIndex = 23;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(869, 541);
+            this.ClientSize = new System.Drawing.Size(904, 389);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.textBoxDB2ServerTag);
             this.Controls.Add(this.label8);

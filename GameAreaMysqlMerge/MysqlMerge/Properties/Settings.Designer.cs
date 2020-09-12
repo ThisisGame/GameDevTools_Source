@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PickDiff.Properties {
+namespace MysqlMerge.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
