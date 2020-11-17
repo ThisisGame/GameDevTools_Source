@@ -71,7 +71,7 @@
             // 
             // textBoxDirPath
             // 
-            this.textBoxDirPath.Enabled = false;
+            this.textBoxDirPath.AllowDrop = true;
             this.textBoxDirPath.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.textBoxDirPath.Location = new System.Drawing.Point(2, 82);
             this.textBoxDirPath.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -81,6 +81,8 @@
             this.textBoxDirPath.Size = new System.Drawing.Size(250, 86);
             this.textBoxDirPath.TabIndex = 3;
             this.textBoxDirPath.Text = "先选择目录，然后生成。";
+            this.textBoxDirPath.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBoxDirPath_DragDrop);
+            this.textBoxDirPath.DragEnter += new System.Windows.Forms.DragEventHandler(this.textBoxDirPath_DragEnter);
             // 
             // Form1
             // 

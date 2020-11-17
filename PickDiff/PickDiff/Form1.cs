@@ -164,5 +164,47 @@ namespace PickDiff
                 throw new Exception("GetMD5HashFromFile() fail,error:" + ex.Message);
             }
         }
+
+        private void textBox2_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                chooseNewDirPath = ((string[])e.Data.GetData(DataFormats.FileDrop.ToString()))[0];
+                textBox2.Text = chooseNewDirPath;
+            }
+        }
+
+        private void textBox2_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.All;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void textBox1_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                chooseOldDirPath = ((string[])e.Data.GetData(DataFormats.FileDrop.ToString()))[0];
+                textBox1.Text = chooseOldDirPath;
+            }
+        }
+
+        private void textBox1_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.All;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
     }
 }

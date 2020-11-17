@@ -72,5 +72,26 @@ namespace UnityRemoveManifestFile
             }
             MessageBox.Show("处理完成，新的目录："+ newDirPath);
         }
+
+        private void textBoxDirPath_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                chooseDirPath = ((string[])e.Data.GetData(DataFormats.FileDrop.ToString()))[0];
+                textBoxDirPath.Text = chooseDirPath;
+            }
+        }
+
+        private void textBoxDirPath_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.All;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
     }
 }
