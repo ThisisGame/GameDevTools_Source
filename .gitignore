@@ -51,3 +51,4 @@ compile_commands.json
 .vs
 /GameAreaMysqlMerge/PickDiff/bin
 /GameAreaMysqlMerge/PickDiff/obj
+/FormatReplaceTxt/obj
