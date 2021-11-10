@@ -1,0 +1,10 @@
+C:\Users\captainchen\source\repos\ReplaceTxt\bin\Debug\ReplaceTxt.exe.config
+C:\Users\captainchen\source\repos\ReplaceTxt\bin\Debug\ReplaceTxt.exe
+C:\Users\captainchen\source\repos\ReplaceTxt\bin\Debug\ReplaceTxt.pdb
+C:\Users\captainchen\source\repos\ReplaceTxt\obj\Debug\ReplaceTxt.csproj.AssemblyReference.cache
+C:\Users\captainchen\source\repos\ReplaceTxt\obj\Debug\ReplaceTxt.Form1.resources
+C:\Users\captainchen\source\repos\ReplaceTxt\obj\Debug\ReplaceTxt.Properties.Resources.resources
+C:\Users\captainchen\source\repos\ReplaceTxt\obj\Debug\ReplaceTxt.csproj.GenerateResource.cache
+C:\Users\captainchen\source\repos\ReplaceTxt\obj\Debug\ReplaceTxt.csproj.CoreCompileInputs.cache
+C:\Users\captainchen\source\repos\ReplaceTxt\obj\Debug\ReplaceTxt.exe
+C:\Users\captainchen\source\repos\ReplaceTxt\obj\Debug\ReplaceTxt.pdb

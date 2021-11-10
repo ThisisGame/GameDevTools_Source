@@ -1,0 +1,10 @@
+C:\Users\captainchen\source\repos\FormatReplaceTxt\bin\Debug\FormatReplaceTxt.exe.config
+C:\Users\captainchen\source\repos\FormatReplaceTxt\bin\Debug\FormatReplaceTxt.exe
+C:\Users\captainchen\source\repos\FormatReplaceTxt\bin\Debug\FormatReplaceTxt.pdb
+C:\Users\captainchen\source\repos\FormatReplaceTxt\obj\Debug\FormatReplaceTxt.Form1.resources
+C:\Users\captainchen\source\repos\FormatReplaceTxt\obj\Debug\FormatReplaceTxt.Properties.Resources.resources
+C:\Users\captainchen\source\repos\FormatReplaceTxt\obj\Debug\FormatReplaceTxt.csproj.GenerateResource.cache
+C:\Users\captainchen\source\repos\FormatReplaceTxt\obj\Debug\FormatReplaceTxt.csproj.CoreCompileInputs.cache
+C:\Users\captainchen\source\repos\FormatReplaceTxt\obj\Debug\FormatReplaceTxt.exe
+C:\Users\captainchen\source\repos\FormatReplaceTxt\obj\Debug\FormatReplaceTxt.pdb
+C:\Users\captainchen\source\repos\FormatReplaceTxt\obj\Debug\FormatReplaceTxt.csproj.AssemblyReference.cache
